@@ -55,10 +55,10 @@
 
 // Arduino pins and timing for the PWM signals.
 #ifdef __1_L298_Standalone__ 
-	#define PIN1_PWM A0
-	#define PIN2_PWM A1
-	#define PIN3_PWM A2
-	#define PIN4_PWM A3
+	#define PIN1_PWM A2
+	#define PIN2_PWM A3
+	#define PIN3_PWM A0
+	#define PIN4_PWM A1
 	#define LONG_DELAY 8000	
 	#define SHORT_DELAY 250			
 #endif
@@ -133,17 +133,17 @@ void loop()
 {
   // This is where the signal is generated.
   // Repeat indefinately
-  _high(3);
-  delayMicroseconds(SHORT_DELAY);
-  _low(3);
-  delayMicroseconds(SHORT_DELAY);
-  _none(1);
-  delayMicroseconds(LONG_DELAY);
   _high(1);
   delayMicroseconds(SHORT_DELAY);
   _low(1);
   delayMicroseconds(SHORT_DELAY);
   _none(3);
+  delayMicroseconds(LONG_DELAY);
+  _high(3);
+  delayMicroseconds(SHORT_DELAY);
+  _low(3);
+  delayMicroseconds(SHORT_DELAY);
+  _none(1);
   delayMicroseconds(LONG_DELAY);
 }
 
