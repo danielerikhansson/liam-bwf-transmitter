@@ -108,117 +108,173 @@ void setup()
 #endif
 
 #ifdef __3_L293_Shield__
-    // Set pins for shift register to output
-    pinMode(MOTORLATCH, OUTPUT);
-    pinMode(MOTORENABLE, OUTPUT);
-    pinMode(MOTORDATA, OUTPUT);
-    pinMode(MOTORCLK, OUTPUT);
+  // Set pins for shift register to output
+  pinMode(MOTORLATCH, OUTPUT);
+  pinMode(MOTORENABLE, OUTPUT);
+  pinMode(MOTORDATA, OUTPUT);
+  pinMode(MOTORCLK, OUTPUT);
 
-    // Set pins for shift register to default value (low);
-    digitalWrite(MOTORDATA, LOW);
-    digitalWrite(MOTORLATCH, LOW);
-    digitalWrite(MOTORCLK, LOW);
-    // Enable the shift register, set Enable pin Low.
-    digitalWrite(MOTORENABLE, LOW);
+  // Set pins for shift register to default value (low);
+  digitalWrite(MOTORDATA, LOW);
+  digitalWrite(MOTORLATCH, LOW);
+  digitalWrite(MOTORCLK, LOW);
+  // Enable the shift register, set Enable pin Low.
+  digitalWrite(MOTORENABLE, LOW);
 #endif
 
 #ifdef __4_MegaMoto_Shield__
   pinMode(PIN1_PWM,OUTPUT);
   pinMode(PIN2_PWM,OUTPUT);
 #endif
-
-
 }
 
 
 void loop()
 {
-
   // This is where the signal is generated.
   // Repeat indefinately
-  high();
-  delayMicroseconds(SHORT_DELAY);  
-  low();
+  _high(3);
   delayMicroseconds(SHORT_DELAY);
-  none();
+  _low(3);
+  delayMicroseconds(SHORT_DELAY);
+  _none(1);
   delayMicroseconds(LONG_DELAY);
-  
-  }
+  _high(1);
+  delayMicroseconds(SHORT_DELAY);
+  _low(1);
+  delayMicroseconds(SHORT_DELAY);
+  _none(3);
+  delayMicroseconds(LONG_DELAY);
+}
 
 void high() {
-	#ifdef __1_L298_Standalone__
-  		digitalWrite(PIN1_PWM, HIGH);
-  		digitalWrite(PIN2_PWM, LOW);
-  		digitalWrite(PIN3_PWM, HIGH);
-  		digitalWrite(PIN4_PWM, LOW);
-  	#endif
-  	
-	#ifdef __2_L298_Shield__
-		digitalWrite(PIN_BREAK_A, LOW);
-  		digitalWrite(PIN1_PWM, HIGH);
-  		digitalWrite(PIN2_PWM, LOW);
-  	#endif
-  	
-	#ifdef __3_L293_Shield__
-  		shiftItOut(39);
-  	#endif
+#ifdef __1_L298_Standalone__
+  digitalWrite(PIN1_PWM, HIGH);
+  digitalWrite(PIN2_PWM, LOW);
+  digitalWrite(PIN3_PWM, HIGH);
+  digitalWrite(PIN4_PWM, LOW);
+#endif
 
-	#ifdef __4_MegaMoto_Shield__
-  		digitalWrite(PIN1_PWM, HIGH);
-  		digitalWrite(PIN2_PWM, LOW);
-  	#endif
+#ifdef __2_L298_Shield__
+  digitalWrite(PIN_BREAK_A, LOW);
+  digitalWrite(PIN1_PWM, HIGH);
+  digitalWrite(PIN2_PWM, LOW);
+#endif
 
+#ifdef __3_L293_Shield__
+      shiftItOut(39);
+#endif
 
+#ifdef __4_MegaMoto_Shield__
+  digitalWrite(PIN1_PWM, HIGH);
+  digitalWrite(PIN2_PWM, LOW);
+#endif
 }
 
 void none() {
-	#ifdef __1_L298_Standalone__
-  		digitalWrite(PIN1_PWM, LOW);
-  		digitalWrite(PIN2_PWM, LOW);
-  		digitalWrite(PIN3_PWM, LOW);
-  		digitalWrite(PIN4_PWM, LOW);
-  	#endif
-  	
-	#ifdef __2_L298_Shield__
-		digitalWrite(PIN_BREAK_A, LOW);
-  		digitalWrite(PIN1_PWM, LOW);
-  		digitalWrite(PIN2_PWM, LOW);
-  	#endif
-  	
-	#ifdef __3_L293_Shield__
-  		shiftItOut(0);
-  	#endif
+#ifdef __1_L298_Standalone__
+  digitalWrite(PIN1_PWM, LOW);
+  digitalWrite(PIN2_PWM, LOW);
+  digitalWrite(PIN3_PWM, LOW);
+  digitalWrite(PIN4_PWM, LOW);
+#endif
+    
+#ifdef __2_L298_Shield__
+  digitalWrite(PIN_BREAK_A, LOW);
+  digitalWrite(PIN1_PWM, LOW);
+  digitalWrite(PIN2_PWM, LOW);
+#endif
+    
+#ifdef __3_L293_Shield__
+  shiftItOut(0);
+#endif
 
-	#ifdef __4_MegaMoto_Shield__
-  		digitalWrite(PIN1_PWM, LOW);
-  		digitalWrite(PIN2_PWM, LOW);
-  	#endif
-
+#ifdef __4_MegaMoto_Shield__
+  digitalWrite(PIN1_PWM, LOW);
+  digitalWrite(PIN2_PWM, LOW);
+#endif
 }
 
 void low() {
-	#ifdef __1_L298_Standalone__
-  		digitalWrite(PIN1_PWM, LOW);
-  		digitalWrite(PIN2_PWM, HIGH);
-  		digitalWrite(PIN3_PWM, LOW);
-  		digitalWrite(PIN4_PWM, HIGH);
-  	#endif
-  	
-	#ifdef __2_L298_Shield__
-		digitalWrite(PIN_BREAK_A, LOW);
-  		digitalWrite(PIN1_PWM, HIGH);
-  		digitalWrite(PIN2_PWM, HIGH);
-  	#endif
-  	
-	#ifdef __3_L293_Shield__
-  		shiftItOut(216);
-  	#endif
+#ifdef __1_L298_Standalone__
+  digitalWrite(PIN1_PWM, LOW);
+  digitalWrite(PIN2_PWM, HIGH);
+  digitalWrite(PIN3_PWM, LOW);
+  digitalWrite(PIN4_PWM, HIGH);
+#endif
+    
+#ifdef __2_L298_Shield__
+  digitalWrite(PIN_BREAK_A, LOW);
+  digitalWrite(PIN1_PWM, HIGH);
+  digitalWrite(PIN2_PWM, HIGH);
+#endif
+    
+#ifdef __3_L293_Shield__
+  shiftItOut(216);
+#endif
 
-	#ifdef __4_MegaMoto_Shield__
-  		digitalWrite(PIN1_PWM, HIGH);
-  		digitalWrite(PIN2_PWM, HIGH);
-  	#endif
+#ifdef __4_MegaMoto_Shield__
+  digitalWrite(PIN1_PWM, HIGH);
+  digitalWrite(PIN2_PWM, HIGH);
+#endif
+}
 
+
+void _high(int i) {
+  switch(i) {
+    case 1:
+		  digitalWrite(PIN1_PWM, HIGH);
+		  digitalWrite(PIN2_PWM, LOW);
+		  digitalWrite(PIN3_PWM, HIGH);
+		  digitalWrite(PIN4_PWM, LOW);
+      break;
+    case 2:
+      digitalWrite(PIN1_PWM, HIGH);
+      digitalWrite(PIN2_PWM, LOW);
+      break;
+    case 3:
+      digitalWrite(PIN3_PWM, HIGH);
+      digitalWrite(PIN4_PWM, LOW);
+      break;
+    }
+}
+
+void _none(int i) {
+  switch(i) {
+    case 1:
+      digitalWrite(PIN1_PWM, LOW);
+      digitalWrite(PIN2_PWM, LOW);
+      digitalWrite(PIN3_PWM, LOW);
+      digitalWrite(PIN4_PWM, LOW);
+      break;
+    case 2:
+      digitalWrite(PIN1_PWM, LOW);
+      digitalWrite(PIN2_PWM, LOW);
+      break;
+    case 3:
+      digitalWrite(PIN3_PWM, LOW);
+      digitalWrite(PIN4_PWM, LOW);
+      break;
+    }
+}
+
+void _low(int i) {
+    switch(i) {
+    case 1:
+      digitalWrite(PIN1_PWM, LOW);
+      digitalWrite(PIN2_PWM, HIGH);
+      digitalWrite(PIN3_PWM, LOW);
+      digitalWrite(PIN4_PWM, HIGH);
+      break;
+    case 2:
+      digitalWrite(PIN1_PWM, LOW);
+      digitalWrite(PIN2_PWM, HIGH);
+      break;
+    case 3:
+      digitalWrite(PIN3_PWM, LOW);
+      digitalWrite(PIN4_PWM, HIGH);
+      break;
+    }
 }
 
 #ifdef __3_L293_Shield__
@@ -233,6 +289,5 @@ void shiftItOut(int out_byte) {
   digitalWrite(MOTORLATCH, HIGH);
   delayMicroseconds(5);    // For safety, not really needed.
   digitalWrite(MOTORLATCH, LOW);
-
 }
 #endif
