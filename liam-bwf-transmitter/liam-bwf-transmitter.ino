@@ -55,10 +55,10 @@
 
 // Arduino pins and timing for the PWM signals.
 #ifdef __1_L298_Standalone__ 
-	#define PIN1_PWM A2
-	#define PIN2_PWM A3
-	#define PIN3_PWM A0
-	#define PIN4_PWM A1
+	#define PIN1_PWM A0
+	#define PIN2_PWM A1
+	#define PIN3_PWM A2
+	#define PIN4_PWM A3
 	#define LONG_DELAY 8000	
 	#define SHORT_DELAY 250			
 #endif
@@ -92,7 +92,7 @@
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println("Liam BWF Transmitter");
 #ifdef __1_L298_Standalone__
   pinMode(PIN1_PWM,OUTPUT);
@@ -137,13 +137,13 @@ void loop()
   delayMicroseconds(SHORT_DELAY);
   _low(1);
   delayMicroseconds(SHORT_DELAY);
-  _none(3);
-  delayMicroseconds(LONG_DELAY);
-  _high(3);
-  delayMicroseconds(SHORT_DELAY);
-  _low(3);
-  delayMicroseconds(SHORT_DELAY);
   _none(1);
+  delayMicroseconds(LONG_DELAY);
+  _high(2);
+  delayMicroseconds(SHORT_DELAY);
+  _low(2);
+  delayMicroseconds(SHORT_DELAY);
+  _none(2);
   delayMicroseconds(LONG_DELAY);
 }
 
