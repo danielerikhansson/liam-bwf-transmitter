@@ -35,10 +35,11 @@
 
 // Select which transmitter type you have by uncommenting that line
 
-#define __1_L298_Standalone__
-//#define __2_L298_Shield__
-//#define __3_L293_Shield__
-//#define __4_MegaMoto_Shield__
+//#define __1_L298_Standalone__
+
+// To set registers
+//#define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
+//#define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
 
 /*
    Connector usage
@@ -51,42 +52,18 @@
 
 
 //--------------- End of definition --------------------------
-//---- No need to change anything below ----------------------
 
 // Arduino pins and timing for the PWM signals.
-#ifdef __1_L298_Standalone__ 
 	#define PIN1_PWM A0
 	#define PIN2_PWM A1
 	#define PIN3_PWM A2
 	#define PIN4_PWM A3
-	#define LONG_DELAY 8000	
-	#define SHORT_DELAY 250			
-#endif
-
-#ifdef __2_L298_Shield__
-	#define PIN1_PWM 3
-	#define PIN2_PWM 12
-	#define PIN_BREAK_A 9
-	#define LONG_DELAY 8000
-	#define SHORT_DELAY 250		
-#endif
-
-#ifdef __3_L293_Shield__
-	#define MOTORLATCH 12
-	#define MOTORCLK 4
-	#define MOTORENABLE 7
-	#define MOTORDATA 8
-	#define LONG_DELAY 8000		//L293 shield is 130ms slower to change
-	#define SHORT_DELAY 250		//L293 shield is 130ms slower to change
-#endif
-
-#ifdef __4_MegaMoto_Shield__
-	#define PIN1_PWM 5
-	#define PIN2_PWM 7
-	#define LONG_DELAY 8000
-	#define SHORT_DELAY 250		
-#endif
-
+//	#define LONG_DELAY_1  8000
+	#define SHORT_DELAY 250
+  #define LONG_DELAY_1  6300
+  #define LONG_DELAY_2  1200
+  #define LONG_DELAY_3  4600
+  #define LONG_DELAY_4  2900
 
 
 
@@ -94,138 +71,101 @@ void setup()
 {
   Serial.begin(115200);
   Serial.println("Liam BWF Transmitter");
-#ifdef __1_L298_Standalone__
+
   pinMode(PIN1_PWM,OUTPUT);
   pinMode(PIN2_PWM,OUTPUT);
   pinMode(PIN3_PWM,OUTPUT);
   pinMode(PIN4_PWM,OUTPUT);
-#endif
-
-#ifdef __2_L298_Shield__
-  pinMode(PIN1_PWM,OUTPUT);
-  pinMode(PIN2_PWM,OUTPUT);
-  pinMode(PIN_BREAK_A, OUTPUT);
-#endif
-
-#ifdef __3_L293_Shield__
-  // Set pins for shift register to output
-  pinMode(MOTORLATCH, OUTPUT);
-  pinMode(MOTORENABLE, OUTPUT);
-  pinMode(MOTORDATA, OUTPUT);
-  pinMode(MOTORCLK, OUTPUT);
-
-  // Set pins for shift register to default value (low);
-  digitalWrite(MOTORDATA, LOW);
-  digitalWrite(MOTORLATCH, LOW);
-  digitalWrite(MOTORCLK, LOW);
-  // Enable the shift register, set Enable pin Low.
-  digitalWrite(MOTORENABLE, LOW);
-#endif
-
-#ifdef __4_MegaMoto_Shield__
-  pinMode(PIN1_PWM,OUTPUT);
-  pinMode(PIN2_PWM,OUTPUT);
-#endif
 }
 
 
 void loop()
 {
-  // This is where the signal is generated.
-  // Repeat indefinately
   _high(1);
   delayMicroseconds(SHORT_DELAY);
   _low(1);
   delayMicroseconds(SHORT_DELAY);
   _none(1);
-  delayMicroseconds(LONG_DELAY);
+  delayMicroseconds(LONG_DELAY_1);
+
+  _high(3);
+  delayMicroseconds(SHORT_DELAY);
+  _low(3);
+  delayMicroseconds(SHORT_DELAY);
+  _none(3);
+  delayMicroseconds(LONG_DELAY_2);
+
   _high(2);
   delayMicroseconds(SHORT_DELAY);
   _low(2);
   delayMicroseconds(SHORT_DELAY);
   _none(2);
-  delayMicroseconds(LONG_DELAY);
+  delayMicroseconds(LONG_DELAY_3);
+
+  _high(3);
+  delayMicroseconds(SHORT_DELAY);
+  _low(3);
+  delayMicroseconds(SHORT_DELAY);
+  _none(3);
+  delayMicroseconds(LONG_DELAY_4);
+
+  _high(2);
+  delayMicroseconds(SHORT_DELAY);
+  _low(2);
+  delayMicroseconds(SHORT_DELAY);
+  _none(2);
+  delayMicroseconds(LONG_DELAY_4);
+
+  _high(3);
+  delayMicroseconds(SHORT_DELAY);
+  _low(3);
+  delayMicroseconds(SHORT_DELAY);
+  _none(3);
+  delayMicroseconds(LONG_DELAY_3);
+
+  _high(2);
+  delayMicroseconds(SHORT_DELAY);
+  _low(2);
+  delayMicroseconds(SHORT_DELAY);
+  _none(2);
+  delayMicroseconds(LONG_DELAY_2);
+
+  _high(3);
+  delayMicroseconds(SHORT_DELAY);
+  _low(3);
+  delayMicroseconds(SHORT_DELAY);
+  _none(3);
+  delayMicroseconds(LONG_DELAY_1);
 }
 
 void high() {
-#ifdef __1_L298_Standalone__
   digitalWrite(PIN1_PWM, HIGH);
   digitalWrite(PIN2_PWM, LOW);
   digitalWrite(PIN3_PWM, HIGH);
   digitalWrite(PIN4_PWM, LOW);
-#endif
-
-#ifdef __2_L298_Shield__
-  digitalWrite(PIN_BREAK_A, LOW);
-  digitalWrite(PIN1_PWM, HIGH);
-  digitalWrite(PIN2_PWM, LOW);
-#endif
-
-#ifdef __3_L293_Shield__
-      shiftItOut(39);
-#endif
-
-#ifdef __4_MegaMoto_Shield__
-  digitalWrite(PIN1_PWM, HIGH);
-  digitalWrite(PIN2_PWM, LOW);
-#endif
 }
 
 void none() {
-#ifdef __1_L298_Standalone__
   digitalWrite(PIN1_PWM, LOW);
   digitalWrite(PIN2_PWM, LOW);
   digitalWrite(PIN3_PWM, LOW);
   digitalWrite(PIN4_PWM, LOW);
-#endif
-    
-#ifdef __2_L298_Shield__
-  digitalWrite(PIN_BREAK_A, LOW);
-  digitalWrite(PIN1_PWM, LOW);
-  digitalWrite(PIN2_PWM, LOW);
-#endif
-    
-#ifdef __3_L293_Shield__
-  shiftItOut(0);
-#endif
-
-#ifdef __4_MegaMoto_Shield__
-  digitalWrite(PIN1_PWM, LOW);
-  digitalWrite(PIN2_PWM, LOW);
-#endif
 }
 
 void low() {
-#ifdef __1_L298_Standalone__
   digitalWrite(PIN1_PWM, LOW);
   digitalWrite(PIN2_PWM, HIGH);
   digitalWrite(PIN3_PWM, LOW);
   digitalWrite(PIN4_PWM, HIGH);
-#endif
-    
-#ifdef __2_L298_Shield__
-  digitalWrite(PIN_BREAK_A, LOW);
-  digitalWrite(PIN1_PWM, HIGH);
-  digitalWrite(PIN2_PWM, HIGH);
-#endif
-    
-#ifdef __3_L293_Shield__
-  shiftItOut(216);
-#endif
-
-#ifdef __4_MegaMoto_Shield__
-  digitalWrite(PIN1_PWM, HIGH);
-  digitalWrite(PIN2_PWM, HIGH);
-#endif
 }
 
 
 void _high(int i) {
   switch(i) {
     case 1:
-		  digitalWrite(PIN1_PWM, HIGH);
-		  digitalWrite(PIN2_PWM, LOW);
-		  digitalWrite(PIN3_PWM, HIGH);
+      digitalWrite(PIN1_PWM, HIGH);
+      digitalWrite(PIN2_PWM, LOW);
+      digitalWrite(PIN3_PWM, HIGH);
 		  digitalWrite(PIN4_PWM, LOW);
       break;
     case 2:
@@ -276,18 +216,3 @@ void _low(int i) {
       break;
     }
 }
-
-#ifdef __3_L293_Shield__
-void shiftItOut(int out_byte) {
-  // Use the default Arduino 'shiftOut()' function to
-  // shift the bits with the MOTORCLK as clock pulse.
-  // The 74HC595 shiftregister wants the MSB first.
-  // After that, generate a latch pulse with MOTORLATCH.
-  
-  shiftOut(MOTORDATA, MOTORCLK, MSBFIRST, out_byte);
-  delayMicroseconds(5);    // For safety, not really needed.
-  digitalWrite(MOTORLATCH, HIGH);
-  delayMicroseconds(5);    // For safety, not really needed.
-  digitalWrite(MOTORLATCH, LOW);
-}
-#endif
